@@ -2,7 +2,7 @@ import "./App.css";
 import Myheader from "./components/Myheader";
 import Nav from "./components/Nav";
 import MyArticle from "./components/MyArticle";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import ProductCard from "./components/ProductCard";
 import Controls from "./components/controls";
 import CreateArticle from "./components/createArticle";
@@ -32,6 +32,13 @@ function App() {
   let _desc = null;
   let _article = null;
 
+  // ProductCard.jsx
+  const products = [
+    { id: 1, name: "무선 키보드", price: 39000, brand: "EZTECH" },
+    { id: 2, name: "무선 마우스", price: 29000, brand: "EZTECH" },
+    { id: 3, name: "모니터", price: 199000, brand: "EZTECH" },
+  ];
+
   if (mode === "welcome") {
     _title = welcome.title;
     _desc = welcome.desc;
@@ -60,12 +67,10 @@ function App() {
     );
   }
 
-  // ProductCard.jsx
-  const products = [
-    { id: 1, name: "무선 키보드", price: 39000, brand: "EZTECH" },
-    { id: 2, name: "무선 마우스", price: 29000, brand: "EZTECH" },
-    { id: 3, name: "모니터", price: 199000, brand: "EZTECH" },
-  ];
+  const handleChangeMode = useCallback(_id => {
+    setMode("read");
+    setId(_id);
+  }, []);
 
   return (
     <>
@@ -87,13 +92,7 @@ function App() {
         </h1>
         <p>{subject.desc}</p>
       </header> */}
-      <Nav
-        data={content}
-        onChangeMode={_id => {
-          setMode("read");
-          setId(_id);
-        }}
-      />
+      <Nav data={content} onChangeMode={handleChangeMode} />
       {_article}
       {/* <ProductCard data={products} /> */}
       <hr />
