@@ -6,20 +6,8 @@ function MyArticle({ title, desc, onChangeMode, onDelete }) {
         <h2>{title}</h2>
         <p>{desc}</p>
       </article>
-      <button
-        onClick={() => {
-          onChangeMode();
-        }}
-      >
-        수정
-      </button>
-      <button
-        onClick={() => {
-          onDelete();
-        }}
-      >
-        삭제
-      </button>
+      {onChangeMode && <button onClick={onChangeMode}>수정</button>}
+      {onDelete && <button onClick={onDelete}>삭제</button>}
     </section>
   );
 }

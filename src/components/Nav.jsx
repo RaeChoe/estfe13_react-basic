@@ -11,7 +11,7 @@ const Nav = memo(function Nav({ data, onChangeMode }) {
         onClick={e => {
           // console.log(e.target.dataset.id);
           e.preventDefault();
-          onChangeMode(Number(e.target.dataset.id));
+          onChangeMode(e.target.dataset.id);
         }}
       >
         {d.title}
