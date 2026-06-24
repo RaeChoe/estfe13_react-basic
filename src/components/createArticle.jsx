@@ -20,7 +20,7 @@ function CreateArticle({ onSubmit }) {
         </div>
         <div>
           <label htmlFor="level">level</label>
-          <input type="text" name="level" id="level" />
+          <input type="number" name="level" id="level" />
         </div>
         <button>Submit</button>
       </form>

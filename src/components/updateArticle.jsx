@@ -53,7 +53,7 @@ function UpdateArticle({ title, desc, level, onSubmit }) {
         <div>
           <label htmlFor="level">level</label>
           <input
-            type="text"
+            type="number"
             name="level"
             id="level"
             value={content.level}
