@@ -7,6 +7,7 @@ import ProductCard from "./components/ProductCard";
 import Controls from "./components/controls";
 import CreateArticle from "./components/createArticle";
 import UpdateArticle from "./components/updateArticle";
+import { preconnect } from "react-dom";
 
 function App() {
   console.log("App render");
@@ -40,6 +41,15 @@ function App() {
     { id: 3, name: "모니터", price: 199000, brand: "EZTECH" },
   ];
 
+  const handleDelete = () => {
+    if (window.confirm("정말 삭제할까요")) {
+      setContent(prev => prev.filter(item => item.id !== id));
+      setMode("welcome");
+    } else {
+      setMode("welcome");
+    }
+  };
+
   if (mode === "welcome") {
     _title = welcome.title;
     _desc = welcome.desc;
@@ -58,6 +68,7 @@ function App() {
         onChangeMode={() => {
           setMode("update");
         }}
+        onDelete={handleDelete}
       />
     );
   } else if (mode === "create") {
@@ -85,16 +96,17 @@ function App() {
         title={selected.title}
         desc={selected.desc}
         onSubmit={(_title, _desc) => {
-          let _content = content.map(c =>
-            c.id === id
-              ? {
-                  ...c,
-                  title: _title,
-                  desc: _desc,
-                }
-              : c,
+          setContent(prev =>
+            prev.map(p =>
+              p.id === id
+                ? {
+                    ...p,
+                    title: _title,
+                    desc: _desc,
+                  }
+                : p,
+            ),
           );
-          setContent(_content);
           setMode("read");
         }}
       />
