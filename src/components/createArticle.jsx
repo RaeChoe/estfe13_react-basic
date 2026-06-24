@@ -7,7 +7,7 @@ function CreateArticle({ onSubmit }) {
         action=""
         onSubmit={e => {
           e.preventDefault();
-          onSubmit(e.target.title.value, e.target.desc.value);
+          onSubmit(e.target.title.value, e.target.desc.value, e.target.level.value);
         }}
       >
         <div>
@@ -17,6 +17,10 @@ function CreateArticle({ onSubmit }) {
         <div>
           <label htmlFor="desc">desc</label>
           <textarea name="desc" id="desc"></textarea>
+        </div>
+        <div>
+          <label htmlFor="level">level</label>
+          <input type="text" name="level" id="level" />
         </div>
         <button>Submit</button>
       </form>
