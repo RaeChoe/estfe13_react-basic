@@ -51,75 +51,76 @@ function App() {
   const handleDelete = () => {
     if (window.confirm("정말 삭제할까요")) {
       setContent(prev => prev.filter(item => item.id !== id));
-      setMode("welcome");
     } else {
       setMode("welcome");
     }
   };
 
-  if (mode === "welcome") {
-    _title = welcome.title;
-    _desc = welcome.desc;
-    _article = <MyArticle title={_title} desc={_desc} />;
-  } else if (mode === "read") {
-    if (selectedArticle) {
-      _title = selectedArticle.title;
-      _desc = selectedArticle.desc;
-      _level = selectedArticle.level;
+  const handleSubmitCreate = (_title, _desc, _level) => {
+    const newId = uuidv4();
+
+    //직접 content에 추가하는경우 원본에 추가되어 유지관리X
+    //concat:배열+배열 a = b.concat(c)
+    let _contents = content.concat({
+      id: newId,
+      title: _title,
+      desc: _desc,
+      level: _level,
+    });
+    setContent(_contents);
+    // setMaxId(newId);
+    setId(newId);
+    setMode("read");
+  };
+  const handleSubmitUpdate = (_title, _desc, _level) => {
+    setContent(prev =>
+      prev.map(p =>
+        p.id === id
+          ? {
+              ...p,
+              title: _title,
+              desc: _desc,
+              level: _level,
+            }
+          : p,
+      ),
+    );
+    setMode("read");
+  };
+
+  const renderArticle = () => {
+    switch (mode) {
+      case "read":
+        return (
+          <MyArticle
+            title={selectedArticle?.title ?? welcome.title}
+            desc={selectedArticle?.desc ?? welcome.desc}
+            level={selectedArticle?.level ?? welcome.level}
+            onChangeMode={() => {
+              setMode("update");
+            }}
+            onDelete={handleDelete}
+          />
+        );
+        break;
+      case "create":
+        return <CreateArticle onSubmit={handleSubmitCreate} />;
+        break;
+      case "update":
+        return (
+          <UpdateArticle
+            title={selectedArticle.title}
+            desc={selectedArticle.desc}
+            level={selectedArticle.level}
+            onSubmit={handleSubmitUpdate}
+          />
+        );
+        break;
+      default: //welcome
+        return <MyArticle title={welcome.title} desc={welcome.desc} />;
+        break;
     }
-    _article = (
-      <MyArticle
-        title={_title}
-        desc={_desc}
-        level={_level}
-        onChangeMode={() => {
-          setMode("update");
-        }}
-        onDelete={handleDelete}
-      />
-    );
-  } else if (mode === "create") {
-    _article = (
-      <CreateArticle
-        onSubmit={(_title, _desc, _level) => {
-          const newId = uuidv4();
-
-          //직접 content에 추가하는경우 원본에 추가되어 유지관리X
-          //concat:배열+배열 a = b.concat(c)
-          let _contents = content.concat({ id: newId, title: _title, desc: _desc, level: _level });
-          setContent(_contents);
-          // setMaxId(newId);
-          setId(newId);
-          setMode("read");
-        }}
-      />
-    );
-  } else if (mode === "update") {
-    if (!selectedArticle) return null;
-
-    _article = (
-      <UpdateArticle
-        title={selectedArticle.title}
-        desc={selectedArticle.desc}
-        level={selectedArticle.level}
-        onSubmit={(_title, _desc, _level) => {
-          setContent(prev =>
-            prev.map(p =>
-              p.id === id
-                ? {
-                    ...p,
-                    title: _title,
-                    desc: _desc,
-                    level: _level,
-                  }
-                : p,
-            ),
-          );
-          setMode("read");
-        }}
-      />
-    );
-  }
+  };
 
   const handleChangeMode = useCallback(_id => {
     setMode("read");
@@ -135,19 +136,8 @@ function App() {
           setMode("welcome");
         }}
       />
-      {/* <header>
-        <h1
-          className="logo"
-          onClick={() => {
-            setMode("welcome");
-          }}
-        >
-          {subject.title}
-        </h1>
-        <p>{subject.desc}</p>
-      </header> */}
-      <Nav data={content} onChangeMode={handleChangeMode} />
-      {_article}
+      <Nav data={content} id={id} onChangeMode={handleChangeMode} />
+      {renderArticle()}
       <hr />
       <Controls
         onChangeMode={() => {
