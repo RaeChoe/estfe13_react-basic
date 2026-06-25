@@ -3,7 +3,6 @@ import Myheader from "./components/Myheader";
 import Nav from "./components/Nav";
 import MyArticle from "./components/MyArticle";
 import { useState, useCallback, useMemo } from "react";
-import ProductCard from "./components/ProductCard";
 import Controls from "./components/controls";
 import CreateArticle from "./components/createArticle";
 import UpdateArticle from "./components/updateArticle";
